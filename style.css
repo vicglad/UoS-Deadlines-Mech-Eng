@@ -1,0 +1,275 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0d0d;
+  --surface: #161616;
+  --border: #2a2a2a;
+  --accent: #e8d5a3;
+  --accent-dim: #a89060;
+  --text: #f0ece0;
+  --muted: #666;
+  --danger: #c0392b;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4rem 2rem;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,213,163,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,213,163,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header ── */
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.title-label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  font-style: normal;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-top: 0.4rem;
+}
+
+.date-badge {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* ── Countdown grid ── */
+
+.units {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.unit {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem 1rem 1.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.unit::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.unit.active::after { transform: scaleX(1); }
+.unit.active { border-color: var(--accent-dim); }
+
+.unit-num {
+  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit-lbl {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+  display: block;
+}
+
+/* ── Progress bar ── */
+
+.progress-section {
+  margin-bottom: 2rem;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: width 1s linear;
+}
+
+/* ── Status line ── */
+
+.status-line {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+}
+
+.status-line span {
+  color: var(--accent-dim);
+}
+
+/* ── Secondary deadlines ── */
+
+.deadlines-section {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.deadlines-heading {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.deadline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.deadline-item:last-child {
+  border-bottom: none;
+}
+
+.deadline-item.past {
+  opacity: 0.35;
+}
+
+.deadline-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.deadline-name {
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.deadline-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.deadline-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.deadline-remaining {
+  font-size: 14px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.deadline-date {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── Done state ── */
+
+.done .unit-num { color: var(--danger); }
+.done .progress-fill { background: var(--danger); }
+
+/* ── Flicker animation ── */
+
+@keyframes flick {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.flick { animation: flick 0.25s ease-out; }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UoS Mech Deadlines</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="header">
+      <p class="eyebrow" id="eyebrow">Most pressing deadline</p>
+      <h1 class="title" id="main-title">Loading&hellip;</h1>
+      <div class="date-badge" id="main-date"></div>
+    </div>
+
+    <div class="units">
+      <div class="unit" id="card-days">
+        <span class="unit-num" id="days">--</span>
+        <span class="unit-lbl">days</span>
+      </div>
+      <div class="unit" id="card-hours">
+        <span class="unit-num" id="hours">--</span>
+        <span class="unit-lbl">hours</span>
+      </div>
+      <div class="unit" id="card-mins">
+        <span class="unit-num" id="minutes">--</span>
+        <span class="unit-lbl">minutes</span>
+      </div>
+      <div class="unit active" id="card-secs">
+        <span class="unit-num" id="seconds">--</span>
+        <span class="unit-lbl">seconds</span>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-meta">
+        <span id="progress-start">start</span>
+        <span id="pct-label">0%</span>
+        <span>deadline</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress" style="width:0%"></div>
+      </div>
+    </div>
+
+    <p class="status-line" id="status">Calculating&hellip;</p>
+
+    <div class="deadlines-section" id="deadlines-section" style="display:none">
+      <p class="deadlines-heading">Upcoming</p>
+      <div id="deadlines-list"></div>
+    </div>
+  </div>
+
+  <script src="deadlines.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
