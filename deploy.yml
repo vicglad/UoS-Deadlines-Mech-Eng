@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  # ── Check whether deadlines.js has any entries ──────────────────────────────
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      has_deadlines: ${{ steps.check.outputs.has_deadlines }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for deadlines
+        id: check
+        run: |
+          node -e "
+          const window = {};
+          eval(require('fs').readFileSync('deadlines.js', 'utf8'));
+          const count = (window.DEADLINES && window.DEADLINES.deadlines || []).length;
+          require('fs').appendFileSync(process.env.GITHUB_OUTPUT, 'has_deadlines=' + (count > 0) + '\n');
+          "
+
+  # ── Deploy if there are deadlines ───────────────────────────────────────────
+  deploy:
+    needs: check
+    if: needs.check.outputs.has_deadlines == 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - uses: actions/deploy-pages@v4
+        id: deploy
+
+  # ── Unpublish if deadlines list is empty ─────────────────────────────────────
+  unpublish:
+    needs: check
+    if: needs.check.outputs.has_deadlines == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disable GitHub Pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api repos/${{ github.repository }}/pages --method DELETE || true
